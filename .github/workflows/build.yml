@@ -1,0 +1,24 @@
+name: Compilation check
+
+on:
+  push:
+    branches:
+      - main
+      - exec
+  pull_request:
+    branches:
+      - main
+      - exec
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installer les dépendences
+        run: sudo apt update && sudo apt install -y gcc make clang
+
+      - name: Compiler le projet
+        run: make

@@ -1,0 +1,44 @@
+name: Coding style check
+
+on:
+  push:
+    branches:
+      - main
+      - exec
+  pull_request:
+    branches:
+      - main
+      - exec
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installation les dépendences
+        run: sudo apt update && sudo apt install -y docker.io curl
+
+      - name: Clonage du coding style checker
+        run: git clone https://github.com/Epitech/coding-style-checker.git
+
+      - name: Vérification des erreurs de coding style
+        run: |
+          chmod +x coding-style-checker/coding-style.sh
+
+          OUTPUT=$(coding-style-checker/coding-style.sh . .)
+
+          echo "$OUTPUT"
+
+          ERRORS=$(echo "$OUTPUT" | grep -oE '^[0-9]+ coding style error\(s\) reported' | awk '{print $1}')
+          if [[ -z "$ERRORS" || ! "$ERRORS" =~ ^[0-9]+$ ]]; then
+            ERRORS=0
+          fi
+
+          if [ "$ERRORS" -ne "0" ]; then
+            echo "🚨 $ERRORS erreurs de coding style détectées !"
+            exit 1
+          else
+            echo "👽️ Aucun problème de coding style détecté !"
+          fi
