@@ -10,6 +10,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "my_lib.h"
 #include "commands.h"
 #include "mysh.h"
@@ -25,28 +26,33 @@ static const my_builtins_t my_builtins_arr[] = {
     {NULL, NULL},
 };
 
-void handle_redirection(char *command)
+int handle_metacharacters(char *command, char ***envp, int *error_code)
 {
-    handle_simple_left_redirection(command);
-    handle_simple_right_redirection(command);
+    if (handle_semicolons(command, envp, error_code))
+        return 1;
     handle_double_right_redirection(command);
+    handle_simple_right_redirection(command);
+    handle_simple_left_redirection(command);
+    if (handle_pipes(command, envp, error_code))
+        return 1;
+    return 0;
 }
 
 exit_status_t analyse_command(char ***envp, char *command, int *error_code)
 {
     exit_status_t status = NORMAL;
+    int stdin_cpy = duplicate_file_descriptor(STDIN_FILENO);
+    int stdout_cpy = duplicate_file_descriptor(STDOUT_FILENO);
     char **commands = NULL;
     int exit_code = 0;
 
-    if (handle_semicolons(command, envp, error_code))
+    if (handle_metacharacters(command, envp, error_code))
         return status;
-    if (handle_pipes(command, envp, error_code))
-        return status;
-    handle_redirection(command);
     for (int i = 0; my_builtins_arr[i].builtins_name; i++)
         if (my_builtins_arr[i].f(envp, command, &status, error_code))
             return status;
     if (*error_code != 84)
         my_exec(envp, command, &status, error_code);
+    restore_stdin_stdout_fd(stdin_cpy, stdout_cpy);
     return NORMAL;
 }
