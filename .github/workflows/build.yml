@@ -3,12 +3,10 @@ name: Compilation check
 on:
   push:
     branches:
-      - main
-      - exec
+      - "**"
   pull_request:
     branches:
-      - main
-      - exec
+      - "**"
 jobs:
   build:
     runs-on: ubuntu-latest
