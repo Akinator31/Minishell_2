@@ -15,30 +15,42 @@
 #include "my_lib.h"
 #include "utils.h"
 
+static void is_next_commands_not_null(char *commands, int pipefd[2])
+{
+    if (commands != NULL) {
+        dup2(pipefd[STDOUT_FILENO], STDOUT_FILENO);
+        close(pipefd[STDOUT_FILENO]);
+    }
+}
+
+static void handle_fork_error(pid_t pid)
+{
+    if (pid == -1) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+}
+
 static void execute_pipe(char ***envp, char **commands, int *error_code)
 {
     int pipefd[2];
     pid_t pid;
-    int fd_in = 0;
+    int fd_in = STDIN_FILENO;
 
     for (int i = 0; commands[i] != NULL; i++) {
-        pid = fork();
         pipe(pipefd);
-        if (pid == -1) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        } else if (pid == 0) {
-            dup2(fd_in, 0);
-            if (commands[i + 1] != NULL)
-                dup2(pipefd[1], 1);
-            close(pipefd[0]);
+        pid = fork();
+        handle_fork_error(pid);
+        if (pid == 0) {
+            dup2(fd_in, STDIN_FILENO);
+            close(pipefd[STDIN_FILENO]);
+            is_next_commands_not_null(commands[i + 1], pipefd);
             analyse_command(envp, commands[i], error_code);
             exit(EXIT_FAILURE);
-        } else {
-            wait(NULL);
-            close(pipefd[1]);
-            fd_in = pipefd[0];
         }
+        wait(NULL);
+        close(pipefd[STDOUT_FILENO]);
+        fd_in = pipefd[STDIN_FILENO];
     }
 }
 
