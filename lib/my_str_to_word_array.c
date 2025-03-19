@@ -18,7 +18,8 @@ static int is_alphanumeric_char(char const str_char, char *separator)
         found = 1;
     if ((str_char >= 'A') && (str_char <= 'Z'))
         found = 1;
-    if (my_is_char_in_str("_-~/.$:!,@| >\"", str_char))
+    if ((str_char >= 34 && str_char <= 64) ||
+        (str_char >= 91 && str_char <= 126))
         found = 1;
     if (my_is_char_in_str(separator, str_char))
         found = 0;
