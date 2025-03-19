@@ -111,7 +111,7 @@ bool is_setenv_command(char ***envp, char *command,
 
     if (is_correct_cmd) {
         if (!error_nb_args(envp, is_correct_cmd, nb_ags, cmd_args)) {
-            *error_code = 84;
+            *error_code = 1;
             return true;
         }
         if (my_setenv(envp, cmd_args[1], cmd_args[2], 1) == -1) {
