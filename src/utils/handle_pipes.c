@@ -46,7 +46,7 @@ static void execute_pipe(char ***envp, char **commands, int *error_code)
             close(pipefd[STDIN_FILENO]);
             is_next_commands_not_null(commands[i + 1], pipefd);
             analyse_command(envp, commands[i], error_code);
-            exit(EXIT_FAILURE);
+            exit(EXIT_SUCCESS);
         }
         wait(NULL);
         close(pipefd[STDOUT_FILENO]);
