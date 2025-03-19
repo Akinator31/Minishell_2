@@ -51,8 +51,7 @@ exit_status_t analyse_command(char ***envp, char *command, int *error_code)
     for (int i = 0; my_builtins_arr[i].builtins_name; i++)
         if (my_builtins_arr[i].f(envp, command, &status, error_code))
             return status;
-    if (*error_code != 84)
-        my_exec(envp, command, &status, error_code);
+    my_exec(envp, command, &status, error_code);
     restore_stdin_stdout_fd(stdin_cpy, stdout_cpy);
     return NORMAL;
 }

@@ -51,6 +51,16 @@ int my_setenv(char ***envp, const char *name, const char *value,
     }
 }
 
+static int incorrect_first_char(char **cmd_args)
+{
+    if (!(my_isalpha(cmd_args[1][0]) || cmd_args[1][0] == '_') ||
+    (cmd_args[1][0] >= '0' && cmd_args[1][0] <= '9')) {
+        write(2, "setenv: Variable name must begin with a letter.\n", 49);
+        return false;
+    }
+    return true;
+}
+
 bool error_nb_args(char ***envp, bool is_correct_cmd,
     int nb_args, char **cmd_args)
 {
@@ -62,10 +72,8 @@ bool error_nb_args(char ***envp, bool is_correct_cmd,
         free_2d_array_of_char(cmd_args);
         return false;
     }
-    if (!(my_isalpha(cmd_args[1][0]) || cmd_args[1][0] == '_')) {
-        write(2, "setenv: Variable name must begin with a letter.\n", 49);
+    if (!incorrect_first_char(cmd_args))
         return false;
-    }
     for (int i = 0; cmd_args[1][i] != '\0'; i++) {
         if (!(my_isalpha(cmd_args[1][i])) && cmd_args[1][i] != '_') {
             write(2, "setenv: Variable name must contain"
