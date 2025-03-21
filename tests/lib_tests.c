@@ -15,7 +15,7 @@ Test(my_strcmp, basic_my_strcmpt_test)
 
 Test(test_free_2d, test_basic)
 {
-    char **word_array = my_str_to_word_array("ceci est un test", " ");
+    char **word_array = str_to_word_array("ceci est un test", " ");
     free_2d_array_of_char(word_array);
     word_array = NULL;
     cr_assert_null(word_array);
@@ -24,7 +24,7 @@ Test(test_free_2d, test_basic)
 Test(get_2d_arr_len, basic_test_get_2d_arr_len)
 {
     char *string = "bonjour";
-    char **string_element = my_str_to_word_array(string, " ");
+    char **string_element = str_to_word_array(string, " ");
 
     cr_assert_eq(get_2d_arr_len(string_element), 1);
     free_2d_array_of_char(string_element);

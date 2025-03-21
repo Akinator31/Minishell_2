@@ -59,7 +59,7 @@ int handle_pipes(char *command, char ***envp, int *error_code)
     char **commands = NULL;
 
     if (my_strstr(command, "|")) {
-        commands = my_str_to_word_array(command, "|");
+        commands = str_to_word_array(command, "|\n\t");
         execute_pipe(envp, commands, error_code);
         free_2d_array_of_char(commands);
         return 1;

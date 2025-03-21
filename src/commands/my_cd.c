@@ -23,7 +23,7 @@ static const my_cd_t my_flags_arr[] = {
 
 static void my_cd(char ***envp, char *command, int *error_code)
 {
-    char **command_element = my_str_to_word_array(command, " ");
+    char **command_element = str_to_word_array(command, " \n\t");
     int nb_args = get_2d_arr_len(command_element);
 
     if (is_too_much_args(nb_args, command_element, error_code))

@@ -11,7 +11,7 @@
 
 bool is_good_cmd(char *cmd, char *prompt)
 {
-    char **prompt_elt = my_str_to_word_array(prompt, " ");
+    char **prompt_elt = str_to_word_array(prompt, " \n\t");
     int is_correct_cmd = 0;
 
     if (get_2d_arr_len(prompt_elt) == 0) {

@@ -23,5 +23,6 @@ void my_putstr(char const *str, int output);
 int my_str_isalpha(char const *str);
 int my_isalpha(char c);
 void my_write_min(char *str, int output);
+char **str_to_word_array(const char *string, const char *separators);
 
 #endif

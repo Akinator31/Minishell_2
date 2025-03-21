@@ -101,7 +101,7 @@ int check_binary(char *path)
 void my_exec(char ***envp, char *command,
     exit_status_t *status, int *error_code)
 {
-    char **command_element = my_str_to_word_array(command, " ");
+    char **command_element = str_to_word_array(command, " \n\t");
     char *binary_path = get_binary(envp, command);
 
     if (!binary_path || command[0] == '.') {

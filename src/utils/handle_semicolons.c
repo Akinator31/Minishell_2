@@ -15,7 +15,7 @@ static void execute_semicolon(char ***envp, char *command, int *error_code)
 {
     int stdin_cpy = dup(STDIN_FILENO);
     int stdout_cpy = dup(STDOUT_FILENO);
-    char **commands = my_str_to_word_array(command, ";");
+    char **commands = str_to_word_array(command, ";\n\t");
 
     for (int i = 0; commands[i] != NULL; i++) {
         analyse_command(envp, commands[i], error_code);

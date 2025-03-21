@@ -22,7 +22,7 @@ char *get_environ_variable_value(char ***envp, char *variable)
 
     if (environ_variable_index != -1) {
         variable_copy = my_strdup(env[environ_variable_index]);
-        token = my_str_to_word_array(variable_copy, "=");
+        token = str_to_word_array(variable_copy, "=\n\t");
         if (token[1])
             value = my_strdup(token[1]);
         free_2d_array_of_char(token);

@@ -29,7 +29,7 @@ char *is_file_executed(char *path, char *binary)
 char *get_binary_path(char **path_element, char *command)
 {
     char *file_buffer = NULL;
-    char **command_element = my_str_to_word_array(command, " ");
+    char **command_element = str_to_word_array(command, " \n\t");
 
     for (int i = 0; path_element[i]; i++) {
         file_buffer = is_file_executed(path_element[i], command_element[0]);
@@ -50,7 +50,7 @@ char *get_binary(char ***envp, char *command)
 
     if (!path)
         return NULL;
-    path_element = my_str_to_word_array(path, ":");
+    path_element = str_to_word_array(path, ":\n\t");
     result = get_binary_path(path_element, command);
     free_2d_array_of_char(path_element);
     free(path);
