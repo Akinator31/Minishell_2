@@ -43,7 +43,7 @@ int my_unsetenv(char **new_environ, const char *name)
     if (!check_variable_name(name))
         return -1;
     while (new_environ[i]) {
-        line_elements = str_to_word_array(new_environ[i], " \n\t");
+        line_elements = str_to_word_array(new_environ[i], " =\n\t");
         if (my_strcmp(line_elements[0], name) == 0) {
             free(new_environ[i]);
             replace_from_index(new_environ, i, nb_vars);
