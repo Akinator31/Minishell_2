@@ -14,8 +14,22 @@
 #include "mysh.h"
 #include "utils.h"
 
+int handle_output_command(int result_command, char *buffer, char ***envp)
+{
+    if (result_command == EXIT) {
+        free(buffer);
+        return EXIT;
+    }
+    if (result_command == NORMAL && isatty(stdin->_fileno))
+        print_prompt(*envp);
+    if (result_command == NOTHING)
+        return 0;
+}
+
 int mysh(char ***envp, int *error_code)
 {
+    int stdin_cpy = duplicate_file_descriptor(STDIN_FILENO);
+    int stdout_cpy = duplicate_file_descriptor(STDOUT_FILENO);
     int result_command = 0;
     char *buffer = NULL;
     size_t len = 0;
@@ -24,15 +38,13 @@ int mysh(char ***envp, int *error_code)
         print_prompt(*envp);
     while (getline(&buffer, &len, stdin) != -1) {
         result_command = analyse_command(envp, buffer, error_code);
-        if (result_command == EXIT) {
-            free(buffer);
+        restore_stdin_stdout_fd(stdin_cpy, stdout_cpy);
+        if (handle_output_command(result_command, buffer, envp)) {
+            close_fds(2, stdin_cpy, stdout_cpy);
             return EXIT;
         }
-        if (result_command == NORMAL && isatty(stdin->_fileno))
-            print_prompt(*envp);
-        if (result_command == NOTHING)
-            continue;
     }
+    close_fds(2, stdin_cpy, stdout_cpy);
     free(buffer);
     return EXIT_EOF;
 }

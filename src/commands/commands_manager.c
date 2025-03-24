@@ -41,10 +41,6 @@ int handle_metacharacters(char *command, char ***envp, int *error_code)
 exit_status_t analyse_command(char ***envp, char *command, int *error_code)
 {
     exit_status_t status = NORMAL;
-    int stdin_cpy = duplicate_file_descriptor(STDIN_FILENO);
-    int stdout_cpy = duplicate_file_descriptor(STDOUT_FILENO);
-    char **commands = NULL;
-    int exit_code = 0;
 
     if (handle_metacharacters(command, envp, error_code))
         return status;
@@ -52,6 +48,5 @@ exit_status_t analyse_command(char ***envp, char *command, int *error_code)
         if (my_builtins_arr[i].f(envp, command, &status, error_code))
             return status;
     my_exec(envp, command, &status, error_code);
-    restore_stdin_stdout_fd(stdin_cpy, stdout_cpy);
     return NORMAL;
 }

@@ -33,5 +33,6 @@ int handle_pipes(char *command, char ***envp, int *error_code);
 int handle_semicolons(char *command, char ***envp, int *error_code);
 int duplicate_file_descriptor(int fd);
 void restore_stdin_stdout_fd(int stdin_cpy, int stdout_cpy);
+void close_fds(int nb_elements, ...);
 
 #endif
