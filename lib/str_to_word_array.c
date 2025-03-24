@@ -19,16 +19,16 @@ char **str_to_word_array(const char *string, const char *separators)
 
     if (!string || !separators)
         return NULL;
-    work_string = strdup(string);
+    work_string = my_strdup(string);
     token = strtok(work_string, separators);
     result = malloc(sizeof(char *));
     while (token) {
-        result = realloc(result, sizeof(char *) * (len + 1));
-        result[len] = strdup(token);
+        result = my_realloc(result, sizeof(char *) * (len + 1));
+        result[len] = my_strdup(token);
         token = strtok(NULL, separators);
         len++;
     }
-    result = realloc(result, sizeof(char *) * (len + 1));
+    result = my_realloc(result, sizeof(char *) * (len + 1));
     result[len] = NULL;
     free(work_string);
     return result;
