@@ -43,15 +43,15 @@ static void execute_pipe(char ***envp, char **commands, int *error_code)
         handle_fork_error(pid);
         if (pid == 0) {
             dup2(fd_in, STDIN_FILENO);
-            close(pipefd[STDIN_FILENO]);
             is_next_commands_not_null(commands[i + 1], pipefd);
             analyse_command(envp, commands[i], error_code);
             exit(EXIT_SUCCESS);
+        } else {
+            close(pipefd[STDOUT_FILENO]);
+            fd_in = pipefd[STDIN_FILENO];
         }
-        wait(NULL);
-        close(pipefd[STDOUT_FILENO]);
-        fd_in = pipefd[STDIN_FILENO];
     }
+    waitpid(pid, NULL, 0);
 }
 
 int handle_pipes(char *command, char ***envp, int *error_code)

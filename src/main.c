@@ -24,6 +24,7 @@ int handle_output_command(int result_command, char *buffer, char ***envp)
         print_prompt(*envp);
     if (result_command == NOTHING)
         return 0;
+    return 0;
 }
 
 int mysh(char ***envp, int *error_code)
