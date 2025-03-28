@@ -21,7 +21,7 @@ void handle_simple_left_redirection(char *command)
         *input_file = '\0';
         input_file = strtok(input_file + 1, " \n");
         fd = open(input_file, O_RDONLY);
-        dup2(fd, STDIN_FILENO);
+        my_dup2(fd, STDIN_FILENO);
         close(fd);
     }
 }
@@ -35,7 +35,7 @@ void handle_simple_right_redirection(char *command)
         *output_file = '\0';
         output_file = strtok(output_file + 1, " \n");
         fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        dup2(fd, STDOUT_FILENO);
+        my_dup2(fd, STDOUT_FILENO);
         close(fd);
     }
 }
@@ -49,7 +49,7 @@ void handle_double_right_redirection(char *command)
         *output_file = '\0';
         output_file = strtok(output_file + 2, " \n");
         fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        dup2(fd, STDOUT_FILENO);
+        my_dup2(fd, STDOUT_FILENO);
         close(fd);
     }
 }

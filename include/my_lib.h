@@ -8,6 +8,7 @@
 #ifndef MY_LIB_H
     #define MY_LIB_H
     #include <sys/types.h>
+    #define STR sizeof(char *)
 
 int my_strlen(char const *str);
 int my_strcmp(char const *s1, char const *s2);
@@ -26,6 +27,6 @@ int my_isalpha(char c);
 void my_write_min(char *str, int output);
 char **str_to_word_array(const char *string, const char *separators);
 void *my_memcpy(void *dest, const void *src, size_t size);
-void *my_realloc(void *pointer, size_t memory_size);
+void *my_realloc(void *pointer, size_t memory_size, size_t original_size);
 
 #endif

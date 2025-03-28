@@ -13,7 +13,6 @@
 
 static void execute_semicolon(char ***envp, char *command, int *error_code)
 {
-    int stdin_cpy = dup(STDIN_FILENO);
     int stdout_cpy = dup(STDOUT_FILENO);
     char **commands = str_to_word_array(command, ";\n\t");
 
@@ -26,8 +25,6 @@ static void execute_semicolon(char ***envp, char *command, int *error_code)
 
 int handle_semicolons(char *command, char ***envp, int *error_code)
 {
-    int stdin_cpy = dup(STDIN_FILENO);
-
     if (my_strstr(command, ";")) {
         execute_semicolon(envp, command, error_code);
         return 1;

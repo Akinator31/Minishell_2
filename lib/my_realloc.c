@@ -8,8 +8,9 @@
 #include <stdlib.h>
 #include "my_lib.h"
 
-void *my_realloc(void *pointer, size_t memory_size)
+void *my_realloc(void *pointer, size_t memory_size, size_t original_size)
 {
+    size_t copy_size = 0;
     void *new_pointer = NULL;
 
     if (!pointer) {
@@ -19,10 +20,13 @@ void *my_realloc(void *pointer, size_t memory_size)
         return new_pointer;
     }
     new_pointer = malloc(memory_size);
-    if (new_pointer)
-        new_pointer = my_memcpy(new_pointer, pointer, memory_size);
-    else
+    if (new_pointer) {
+        copy_size = (original_size < memory_size) ?
+            original_size : memory_size;
+        new_pointer = my_memcpy(new_pointer, pointer, copy_size);
+    } else {
         return NULL;
+    }
     free(pointer);
     return new_pointer;
 }

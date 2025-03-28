@@ -34,12 +34,6 @@ int duplicate_file_descriptor(int fd)
 
 void restore_stdin_stdout_fd(int stdin_cpy, int stdout_cpy)
 {
-    if (dup2(stdin_cpy, STDIN_FILENO) == -1) {
-        perror("dup2 stdin_restore");
-        exit(EXIT_FAILURE);
-    }
-    if (dup2(stdout_cpy, STDOUT_FILENO) == -1) {
-        perror("dup2 stdout_restore");
-        exit(EXIT_FAILURE);
-    }
+    my_dup2(stdin_cpy, STDIN_FILENO);
+    my_dup2(stdout_cpy, STDOUT_FILENO);
 }

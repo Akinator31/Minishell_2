@@ -55,7 +55,7 @@ static int incorrect_first_char(char **cmd_args)
 {
     if (!(my_isalpha(cmd_args[1][0]) || cmd_args[1][0] == '_') ||
     (cmd_args[1][0] >= '0' && cmd_args[1][0] <= '9')) {
-        write(2, "setenv: Variable name must begin with a letter.\n", 49);
+        write(2, "setenv: Variable name must begin with a letter.\n", 48);
         return false;
     }
     return true;
@@ -89,13 +89,13 @@ bool is_correct_arguments(char *name, char *value)
     int i = 0;
 
     if (!(my_isalpha(name[0]) || name[0] == '_')) {
-        write(2, "setenv: Variable name must begin with a letter.\n", 49);
+        write(2, "setenv: Variable name must begin with a letter.\n", 48);
         return false;
     }
     for (; name[i] != '\0'; i++) {
         if (!(my_isalpha(name[0])) && name[i] != '_') {
             write(2, "setenv: Variable name must contain"
-                "alphanumeric characters.\n", 60);
+                "alphanumeric characters.\n", 59);
             return false;
         }
     }
@@ -115,7 +115,7 @@ bool is_setenv_command(char ***envp, char *command,
             return true;
         }
         if (my_setenv(envp, cmd_args[1], cmd_args[2], 1) == -1) {
-            write(2, "Not enough space in the environment\n", 37);
+            write(2, "Not enough space in the environment\n", 36);
             return true;
         }
         free_2d_array_of_char(cmd_args);

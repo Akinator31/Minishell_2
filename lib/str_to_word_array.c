@@ -23,12 +23,12 @@ char **str_to_word_array(const char *string, const char *separators)
     token = strtok(work_string, separators);
     result = malloc(sizeof(char *));
     while (token) {
-        result = my_realloc(result, sizeof(char *) * (len + 1));
+        result = my_realloc(result, STR * (len + 1), STR * len);
         result[len] = my_strdup(token);
         token = strtok(NULL, separators);
         len++;
     }
-    result = my_realloc(result, sizeof(char *) * (len + 1));
+    result = my_realloc(result, STR * (len + 1), STR * len);
     result[len] = NULL;
     free(work_string);
     return result;
