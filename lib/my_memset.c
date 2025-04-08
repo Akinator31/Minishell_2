@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include "my_lib.h"
 
 void *my_memset(void *pointer, int value, size_t size)
 {

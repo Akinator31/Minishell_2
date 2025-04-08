@@ -5,8 +5,16 @@
 ** lib_tests
 */
 
+#include <unistd.h>
 #include <criterion/criterion.h>
+#include <criterion/redirect.h>
 #include "my_lib.h"
+
+void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
 
 Test(my_strcmp, basic_my_strcmpt_test)
 {
@@ -59,8 +67,43 @@ Test(my_str_isalpha, basic_test_my_str_is_alpha)
     char *string = "BONJOUR";
     char *string2 = "";
     char *string3 = "122344566";
+    char *string4 = "bonjour";
 
     cr_assert_eq(my_str_isalpha(string), 0);
     cr_assert_eq(my_str_isalpha(string2), 1);
     cr_assert_eq(my_str_isalpha(string3), 0);
+    cr_assert_eq(my_str_isalpha(string4), 0);
+}
+
+Test(my_is_char_in_str, basic_test_my_is_char_in_str)
+{
+
+    char *string = "Ceci est une string";
+    char test = 'z';
+    char test1 = 'u';
+
+    cr_assert_eq(my_is_char_in_str(string, test), 0);
+    cr_assert_eq(my_is_char_in_str(string, test1), 1);
+}
+
+Test(my_putstr, basic_test_my_putstr, .init=redirect_all_std)
+{
+    my_putstr("Ceci est un test enorme !", STDOUT_FILENO);
+    cr_assert_stdout_eq_str("Ceci est un test enorme !");
+}
+
+Test(my_realloc, basic_test_my_realloc)
+{
+    int *pointer = NULL;
+    
+    pointer = my_realloc(pointer, sizeof(int), sizeof(int));
+    cr_assert_not_null(pointer);
+}
+
+Test(free_2d_array_of_char, basic_test_free_2d_array_of_char)
+{
+    char **arr = NULL;
+
+    free_2d_array_of_char(arr);
+    cr_assert_null(arr);
 }
